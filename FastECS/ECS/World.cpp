@@ -39,7 +39,7 @@ void World::UpdateGameSystems()
 {
 	for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
 	{
-		if (m_Game_Systems[i]->getComponentTypes().size() == 1)
+		/*if (m_Game_Systems[i]->getComponentTypes().size() == 1)
 		{
 			System* sys = m_Game_Systems[i];
 			std::vector<BaseComponent>& comp = m_components[sys->getComponentTypes()[0]];
@@ -53,9 +53,9 @@ void World::UpdateGameSystems()
 		}
 		else
 		{
-			m_Game_Systems[i]->UpdateComponents();
-		}
+		}*/
 
+		m_Game_Systems[i]->UpdateComponents();
 
 
 	}

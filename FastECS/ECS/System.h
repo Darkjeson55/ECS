@@ -34,7 +34,9 @@ protected:
 private:
 	std::bitset<1024> m_key;
 	std::vector<uint32_t> ComponentTypes;
-	std::unordered_map<uint32_t, std::vector<BaseComponent*>> Entitys;
+	//std::unordered_map<uint32_t, std::vector<BaseComponent*>> Entitys;
+
+	std::vector<std::vector<BaseComponent*>> Entitys;
 
 
 };
