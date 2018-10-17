@@ -2,10 +2,6 @@
 #define COMPONENT_H
 
 #include <iostream>
-#include <vector>
-#include "Entity.h"
-struct BaseComponent;
-
 
 struct BaseComponent
 {

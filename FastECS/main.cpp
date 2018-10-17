@@ -12,23 +12,10 @@
 using namespace std;
 using namespace std::chrono;
 
-struct Entitys
+struct Transform
 {
-	virtual void Update() {}
-};
-
-struct Player : public Entitys
-{
-	void Update() {
-		x += 5;
-	}
-
 	float x;
 };
-
-
-std::vector<Entitys*> m_Entity;
-
 
 
 int main()
@@ -42,21 +29,16 @@ int main()
 		entity->add_Component<TestComponent>();
 	}
 
-	
 
 
 
 	auto start = steady_clock::now();
 	World::UpdateGameSystems();
 	auto end = steady_clock::now();
-
 	
 
 	auto clac = end - start;
-	//auto clac01 = end01 - start01;
-
 	std::cout << duration_cast<milliseconds>(clac).count() << std::endl;
-	//std::cout << duration_cast<milliseconds>(clac01).count() << std::endl;
 
 
 
