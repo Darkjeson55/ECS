@@ -23,7 +23,7 @@ int main()
 	World::addGameSystem(new TestSystem());
 
 
-	for (uint32_t i = 0; i < 1000000; i++)
+	for (uint32_t i = 0; i < 5; i++)
 	{
 		auto entity = World::CreateEntity();
 		entity->add_Component<TestComponent>();

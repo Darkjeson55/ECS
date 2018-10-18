@@ -25,19 +25,59 @@ void World::removeEntity(EntityHandler* handler)
 {
 	Entity* entity = HandleToRow(handler);
 
-	/*for (uint32_t i = 0; i < std::get<1>(*entity).size(); i++)
+	auto EnttKey = getEntityComponentKey(handler);
+
+	for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
 	{
-		m_components[std::get<1>(*entity)[i].first].erase(m_components[std::get<1>(*entity)[i].first].begin() + std::get<1>(*entity)[i].second);
-		std::get<1>(*entity).erase(std::get<1>(*entity).begin() + i);
+		System* gameSystem = m_Game_Systems[i];
+		std::bitset<1024>& systKey = gameSystem->getSystemKey();
+		if ((EnttKey & systKey) == systKey)
+		{
+			m_Game_Systems[i]->removeEntity(getEntityID(handler));
+		}
 	}
 
-	m_Entitys.erase(m_Entitys.begin() + std::get<0>(*entity));
-	delete(entity);*/
+
+	for (uint32_t i = 0; i < getEntityComponentList(handler).size(); i++)
+	{
+		auto ComponentList = m_components[getEntityComponentList(handler)[i].first];
+		removeComponentInternal(ComponentList, getEntityComponentList(handler)[i].second, getEntityComponentList(handler)[i].first);
+	}
+
+	m_Entitys.erase(m_Entitys.begin() + getEntityID(handler));
+
+	delete(entity);
 }
+
+
+
+void World::removeComponentInternal(std::vector<BaseComponent>& memory, uint32_t Componentindex, uint32_t EntityComponentID)
+{
+	if (Componentindex != memory.size() - 1)
+	{
+		BaseComponent& compoent = memory[memory.size() - 1];
+		memory[Componentindex] = std::move(compoent);
+
+		for (uint32_t i = 0; i < getEntityComponentList(compoent.handler).size(); i++)
+		{
+			if (EntityComponentID == getEntityComponentList(compoent.handler)[i].first)
+			{
+				getEntityComponentList(compoent.handler)[i].second = Componentindex;
+			}
+		}
+		memory.pop_back();
+	}
+	else
+	{
+		memory.erase(memory.begin() + Componentindex);
+	}
+
+}
+
 
 void World::UpdateGameSystems()
 {
-	for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
+	/*for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
 	{
 		if (m_Game_Systems[i]->getComponentTypes().size() == 1)
 		{
@@ -46,7 +86,7 @@ void World::UpdateGameSystems()
 
 			for (int x = 0; x < comp.size(); x++)
 			{
-				BaseComponent* tempComponent = &(BaseComponent&)comp[x];
+				BaseComponent* tempComponent = (BaseComponent*)&comp[x];
 				sys->Update(&tempComponent);
 			}
 
@@ -55,10 +95,7 @@ void World::UpdateGameSystems()
 		{
 			m_Game_Systems[i]->UpdateComponents();
 		}
-
-
-
-	}
+	}*/
 }
 
 
@@ -66,28 +103,59 @@ void World::addGameSystem(System* system)
 {
 	m_Game_Systems.push_back(system);
 
+	/*auto sysKey = system->getSystemKey();
+
 	if (m_Entitys.size() > 0)
 	{
 		for (uint32_t i = 0; i < m_Entitys.size(); i++)
 		{
-					
+			auto EntityKey = std::get<2>(*m_Entitys[i]);
+
+
+			if ((EntityKey & sysKey) == sysKey)
+			{
+				auto componentTypes = system->getComponentTypes();
+
+				std::vector<BaseComponent*> m_components;
+				for (uint32_t x = 0; x < componentTypes.size(); x++)
+				{
+					m_components.emplace_back(getComponentByID(componentTypes[x], m_Entitys[i]));
+				}
+
+
+				system->addEntity(std::get<0>(*m_Entitys[i]), m_components);
+
+			}
 		}
-	}
+	}*/
 
 }
  
 
-BaseComponent* World::getComponentByID(uint32_t ID, EntityHandler* handler)
+BaseComponent& World::getComponentByID(uint32_t ID, EntityHandler* handler)
 {
 
 	for (uint32_t i = 0; i < std::get<1>(*HandleToRow(handler)).size(); i++)
 	{
 		if (ID == std::get<1>(*HandleToRow(handler))[i].first)
 		{
-			return &m_components[ID][std::get<1>(*HandleToRow(handler))[i].second];
+			return m_components[ID][std::get<1>(*HandleToRow(handler))[i].second];
 		}
 	}
 }
+
+BaseComponent* World::getComponentByID(uint32_t ID, Entity* handler)
+{
+
+	for (uint32_t i = 0; i < std::get<1>(*handler).size(); i++)
+	{
+		if (ID == std::get<1>(*handler)[i].first)
+		{
+			return &m_components[ID][std::get<1>(*handler)[i].second];
+		}
+	}
+}
+
 
 
 void World::removeGameSystem(System* system)
@@ -98,5 +166,8 @@ void World::removeGameSystem(System* system)
 
 World::~World()
 {
-	
+	//for ()
+	//{
+
+	//}
 }

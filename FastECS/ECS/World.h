@@ -33,8 +33,8 @@ public:
 	static void addComponent(EntityHandler* handler, T* Component)
 	{
 		std::vector<BaseComponent>& memory = m_components[T::ID];
-		memory.emplace_back(*Component);
-
+		memory.emplace_back(std::move(*Component));
+		memory.back().handler = handler;
 
 		std::pair<ComponentType, ComponentID> pair;
 		pair.first = T::ID;
@@ -58,35 +58,25 @@ public:
 				std::vector<BaseComponent*> m_components;
 				for (uint32_t x = 0; x < componentTypes.size(); x++)
 				{
-					m_components.emplace_back( getComponentByID(componentTypes[x], handler));
+					//auto compType = componentTypes[x];
+
+
+					BaseComponent* tempComponent = (BaseComponent*)&getComponentByID(componentTypes[x], handler);
+
+					m_components.emplace_back();
 				}
 
 
-				gameSystem->addEntity(std::get<0>(*HandleToRow(handler)), m_components);
+				gameSystem->addEntity(getEntityID(handler), m_components);
 
 			}
 			
 		}
 	}
 
-	template<class T>
-	static void removeComponent(EntityHandler* handler)
-	{
-		for (uint32_t i = 0; i < HandleToRow(handler)->second.size(); i++)
-		{
-			if (T::ID == HandleToRow(handler)->second[i].first)
-			{
-				m_components[T::ID].erase(HandleToRow(handler)->second[i].second);
-				HandleToRow(handler)->second.erase(HandleToRow(handler)->second.begin() + i);
 
 
-				for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
-				{
-					m_Game_Systems[i]->deregisterEntity(handler);
-				}
-			}
-		}
-	}
+	static void removeComponentInternal(std::vector<BaseComponent>& memory, uint32_t Componentindex, uint32_t EntityComponentID);
 
 	template<class T>
 	static T* getComponentInternal(EntityHandler* handler)
@@ -106,7 +96,8 @@ public:
 
 
 
-	static BaseComponent* getComponentByID(uint32_t ID, EntityHandler* handler);
+	static BaseComponent& getComponentByID(uint32_t ID, EntityHandler* handler);
+	static BaseComponent* getComponentByID(uint32_t ID, Entity* handler);
 
 
 
@@ -127,6 +118,25 @@ private:
 	{
 		return (Entity*)entity;
 	}
+
+	static inline uint32_t getEntityID(EntityHandler* entity)
+	{
+		return std::get<0>(*HandleToRow(entity));
+	}
+
+	static inline std::vector<std::pair<ComponentType, ComponentID>> getEntityComponentList(EntityHandler* entity)
+	{
+		return std::get<1>(*HandleToRow(entity));
+	}
+
+	static inline std::bitset<1024> getEntityComponentKey(EntityHandler* entity)
+	{
+		return std::get<2>(*HandleToRow(entity));
+	}
+
+
+
+
 };
 
 

@@ -2,12 +2,19 @@
 #define COMPONENT_H
 
 #include <iostream>
+#include "Entity.h"
+
+
+
+
 
 struct BaseComponent
 {
+	EntityHandler* handler;
 	static uint32_t registerComponentType();
 private:
 	static uint32_t index;
+
 };
 
 template<class T>
