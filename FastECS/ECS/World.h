@@ -17,6 +17,8 @@
 #include "Entity.h"
 #include "System.h"
 
+#include "../TestComponent.h"
+
 
 class World
 {
@@ -32,46 +34,50 @@ public:
 	template<class T>
 	static void addComponent(EntityHandler* handler, T* Component)
 	{
-		std::vector<BaseComponent>& memory = m_components[T::ID];
-		memory.emplace_back(std::move(*Component));
-		memory.back().handler = handler;
+
+		
+		uint32_t index = m_components[T::ID].size();
+		m_components[T::ID].push_back(*Component);
+		m_components[T::ID].back().handler = handler;
 
 		std::pair<ComponentType, ComponentID> pair;
 		pair.first = T::ID;
-		pair.second = memory.size();
+		pair.second = index;
 		std::get<1>(*HandleToRow(handler)).emplace_back(pair);
 		std::get<2>(*HandleToRow(handler))[T::ID] = 1;
 
-		auto EnttKey = std::get<2>(*HandleToRow(handler));
-
-		for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
-		{
-
-			System* gameSystem = m_Game_Systems[i];
-
-			std::bitset<1024>& systKey = gameSystem->getSystemKey();
-
-			if ((EnttKey & systKey) == systKey)
-			{
-				auto componentTypes = gameSystem->getComponentTypes();
-
-				std::vector<BaseComponent*> m_components;
-				for (uint32_t x = 0; x < componentTypes.size(); x++)
-				{
-					//auto compType = componentTypes[x];
 
 
-					BaseComponent* tempComponent = (BaseComponent*)&getComponentByID(componentTypes[x], handler);
-
-					m_components.emplace_back();
-				}
 
 
-				gameSystem->addEntity(getEntityID(handler), m_components);
+		//auto EnttKey = std::get<2>(*HandleToRow(handler));
 
-			}
-			
-		}
+		////std::cout << "NumberofSystems" << m_Game_Systems.size() << std::endl;
+
+		//for (uint32_t i = 0; i < m_Game_Systems.size(); ++i)
+		//{
+
+		//	System* gameSystem = m_Game_Systems[i];
+
+		//	std::bitset<1024>& systKey = gameSystem->getSystemKey();
+
+		//	if ((EnttKey & systKey) == systKey)
+		//	{
+		//		auto componentTypes = gameSystem->getComponentTypes();
+
+		//		std::vector<BaseComponent*> m_components;
+		//		for (uint32_t x = 0; x < componentTypes.size(); ++x)
+		//		{
+		//			BaseComponent* tempComponent = getComponentByID(componentTypes[x], handler);
+		//			m_components.emplace_back(tempComponent);
+		//		}
+
+
+		//		gameSystem->addEntity(getEntityID(handler), m_components);
+
+		//	}
+		//	
+		//}
 	}
 
 
@@ -96,7 +102,7 @@ public:
 
 
 
-	static BaseComponent& getComponentByID(uint32_t ID, EntityHandler* handler);
+	static BaseComponent* getComponentByID(uint32_t ID, EntityHandler* handler);
 	static BaseComponent* getComponentByID(uint32_t ID, Entity* handler);
 
 

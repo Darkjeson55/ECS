@@ -77,17 +77,16 @@ void World::removeComponentInternal(std::vector<BaseComponent>& memory, uint32_t
 
 void World::UpdateGameSystems()
 {
-	/*for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
+	for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
 	{
 		if (m_Game_Systems[i]->getComponentTypes().size() == 1)
 		{
-			System* sys = m_Game_Systems[i];
-			std::vector<BaseComponent>& comp = m_components[sys->getComponentTypes()[0]];
+			std::vector<BaseComponent>& comp = m_components[m_Game_Systems[i]->getComponentTypes()[0]];
 
 			for (int x = 0; x < comp.size(); x++)
 			{
 				BaseComponent* tempComponent = (BaseComponent*)&comp[x];
-				sys->Update(&tempComponent);
+				m_Game_Systems[i]->Update(&tempComponent);
 			}
 
 		}
@@ -95,7 +94,7 @@ void World::UpdateGameSystems()
 		{
 			m_Game_Systems[i]->UpdateComponents();
 		}
-	}*/
+	}
 }
 
 
@@ -103,7 +102,7 @@ void World::addGameSystem(System* system)
 {
 	m_Game_Systems.push_back(system);
 
-	/*auto sysKey = system->getSystemKey();
+	auto sysKey = system->getSystemKey();
 
 	if (m_Entitys.size() > 0)
 	{
@@ -127,26 +126,26 @@ void World::addGameSystem(System* system)
 
 			}
 		}
-	}*/
+	}
 
 }
  
 
-BaseComponent& World::getComponentByID(uint32_t ID, EntityHandler* handler)
+BaseComponent* World::getComponentByID(uint32_t ID, EntityHandler* handler)
 {
 
-	for (uint32_t i = 0; i < std::get<1>(*HandleToRow(handler)).size(); i++)
+	for (uint32_t y = 0; y < getEntityComponentList(handler).size(); y++)
 	{
-		if (ID == std::get<1>(*HandleToRow(handler))[i].first)
+		if (ID == getEntityComponentList(handler)[y].first)
 		{
-			return m_components[ID][std::get<1>(*HandleToRow(handler))[i].second];
+			std::vector<BaseComponent>& array = m_components[ID];
+			return &array[getEntityComponentList(handler)[y].second];
 		}
 	}
 }
 
 BaseComponent* World::getComponentByID(uint32_t ID, Entity* handler)
 {
-
 	for (uint32_t i = 0; i < std::get<1>(*handler).size(); i++)
 	{
 		if (ID == std::get<1>(*handler)[i].first)
@@ -166,8 +165,15 @@ void World::removeGameSystem(System* system)
 
 World::~World()
 {
-	//for ()
-	//{
+	for (uint32_t i = 0; i < m_Entitys.size(); i++)
+	{
+		delete m_Entitys[i];
+	}
 
-	//}
+	for (uint32_t i = 0; i < m_Game_Systems.size(); i++)
+	{
+		delete m_Game_Systems[i];
+	}
+	m_Game_Systems.clear();
+	m_Entitys.clear();
 }

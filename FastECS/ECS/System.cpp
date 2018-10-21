@@ -9,10 +9,10 @@ System::System()
 
 void System::UpdateComponents()
 {
-	for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
+	for (uint32_t i = 0; i < m_Components.size(); i++)
 	{
-		BaseComponent* components = &(BaseComponent&)it;
-		Update(&components);
+		std::vector<BaseComponent*>& components = m_Components[i];
+		Update(&components[0]);
 	}
 }
 

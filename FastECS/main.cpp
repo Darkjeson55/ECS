@@ -20,7 +20,7 @@ struct Transform
 
 int main()
 {
-	World::addGameSystem(new TestSystem());
+	/*World::addGameSystem(new TestSystem());
 
 
 	for (uint32_t i = 0; i < 5; i++)
@@ -38,7 +38,7 @@ int main()
 	
 
 	auto clac = end - start;
-	std::cout << duration_cast<milliseconds>(clac).count() << std::endl;
+	std::cout << duration_cast<milliseconds>(clac).count() << std::endl;*/
 
 
 
