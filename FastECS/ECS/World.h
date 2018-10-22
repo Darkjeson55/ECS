@@ -27,119 +27,24 @@ public:
 	~World();
 	
 	
-	static EntityHandler* CreateEntity();
-
-	static void removeEntity(EntityHandler* handler);
-
 	template<class T>
-	static void addComponent(EntityHandler* handler, T* Component)
+	static void addComponent(T* Component)
 	{
-
-		
-		uint32_t index = m_components[T::ID].size();
-		m_components[T::ID].push_back(*Component);
-		m_components[T::ID].back().handler = handler;
-
-		std::pair<ComponentType, ComponentID> pair;
-		pair.first = T::ID;
-		pair.second = index;
-		std::get<1>(*HandleToRow(handler)).emplace_back(pair);
-		std::get<2>(*HandleToRow(handler))[T::ID] = 1;
-
-
-
-
-
-		//auto EnttKey = std::get<2>(*HandleToRow(handler));
-
-		////std::cout << "NumberofSystems" << m_Game_Systems.size() << std::endl;
-
-		//for (uint32_t i = 0; i < m_Game_Systems.size(); ++i)
-		//{
-
-		//	System* gameSystem = m_Game_Systems[i];
-
-		//	std::bitset<1024>& systKey = gameSystem->getSystemKey();
-
-		//	if ((EnttKey & systKey) == systKey)
-		//	{
-		//		auto componentTypes = gameSystem->getComponentTypes();
-
-		//		std::vector<BaseComponent*> m_components;
-		//		for (uint32_t x = 0; x < componentTypes.size(); ++x)
-		//		{
-		//			BaseComponent* tempComponent = getComponentByID(componentTypes[x], handler);
-		//			m_components.emplace_back(tempComponent);
-		//		}
-
-
-		//		gameSystem->addEntity(getEntityID(handler), m_components);
-
-		//	}
-		//	
-		//}
+		memory.emplace_back(Component);
 	}
 
 
-
-	static void removeComponentInternal(std::vector<BaseComponent>& memory, uint32_t Componentindex, uint32_t EntityComponentID);
-
-	template<class T>
-	static T* getComponentInternal(EntityHandler* handler)
-	{
-		for (uint32_t i = 0; i < std::get<1>(*HandleToRow(handler)).size(); i++)
-		{
-			if (T::ID == std::get<1>(*HandleToRow(handler))[i].first)
-			{
-				return (T*)m_components[T::ID][std::get<1>(*HandleToRow(handler))[i].second];
-			}
-		}
-
-		return nullptr;
-	}
-
-
-
-
-
-	static BaseComponent* getComponentByID(uint32_t ID, EntityHandler* handler);
-	static BaseComponent* getComponentByID(uint32_t ID, Entity* handler);
-
-
-
-	static void addGameSystem(System* system);
-	static void removeGameSystem(System* system);
-
-	static void UpdateGameSystems();
+	static void Update();
 
 
 private:
-	static std::vector<System*> m_Game_Systems;
+	//static std::vector<System*> m_Game_Systems;
 
-	static std::vector<Entity*> m_Entitys;
+	//static std::vector<Entity*> m_Entitys;
 	//static std::map<uint32_t,std::vector<uint8_t>> m_components;
-	static std::unordered_map<uint32_t, std::vector<BaseComponent>> m_components;
+	//static std::unordered_map<uint32_t, std::vector<BaseComponent*>> m_components;
 
-	static inline Entity* HandleToRow(EntityHandler* entity)
-	{
-		return (Entity*)entity;
-	}
-
-	static inline uint32_t getEntityID(EntityHandler* entity)
-	{
-		return std::get<0>(*HandleToRow(entity));
-	}
-
-	static inline std::vector<std::pair<ComponentType, ComponentID>> getEntityComponentList(EntityHandler* entity)
-	{
-		return std::get<1>(*HandleToRow(entity));
-	}
-
-	static inline std::bitset<1024> getEntityComponentKey(EntityHandler* entity)
-	{
-		return std::get<2>(*HandleToRow(entity));
-	}
-
+	static std::vector<BaseComponent*> memory;
 
 
 

@@ -17,7 +17,6 @@ struct EntityHandler
 	template<class T, class... Args>
 	void add_Component(Args... args)
 	{
-		T* component = new T(args...);
-		World::addComponent(this, component);
+		World::addComponent(this, new T(args...));
 	}
 };
