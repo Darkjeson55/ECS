@@ -12,24 +12,24 @@
 using namespace std;
 using namespace std::chrono;
 
-struct Transform : Component<Transform>
-{
-	float x;
-};
 
 
 int main()
 {
-	
-	for (uint32_t i = 0; i < 5; i++)
+
+	World::addGameSystem(new TestSystem());
+
+	for (int i = 0; i<5000000; i++)
 	{
-		World::addComponent(new Transform());
+		auto entity = World::CreateEntity();
+		entity->add_Component<TestComponent>();
 	}
 
 
 
+	
 	auto start = steady_clock::now();
-	World::Update();
+	World::UpdateGameSystems();
 	auto end = steady_clock::now();
 
 

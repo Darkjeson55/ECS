@@ -117,6 +117,7 @@
     <ClCompile Include="ECS\Component.cpp" />
     <ClCompile Include="ECS\System.cpp" />
     <ClCompile Include="ECS\World.cpp" />
+    <ClCompile Include="ECS\Entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TestSystem.cpp" />
   </ItemGroup>

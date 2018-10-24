@@ -9,6 +9,7 @@ System::System()
 
 void System::UpdateComponents()
 {
+
 	for (uint32_t i = 0; i < m_Components.size(); i++)
 	{
 		std::vector<BaseComponent*>& components = m_Components[i];

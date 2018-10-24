@@ -5,5 +5,5 @@
 struct TestComponent : public Component<TestComponent>
 {
 public:
-	float x;
+	float x = 2;
 };
