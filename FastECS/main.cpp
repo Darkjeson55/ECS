@@ -19,7 +19,7 @@ int main()
 
 	World::addGameSystem(new TestSystem());
 
-	for (int i = 0; i<5000000; i++)
+	for (int i = 0; i<1000000; i++)
 	{
 		auto entity = World::CreateEntity();
 		entity->add_Component<TestComponent>();
