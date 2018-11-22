@@ -18,40 +18,5 @@
     <ClCompile Include="main.cpp">
       <Filter>File di risorse</Filter>
     </ClCompile>
-    <ClCompile Include="ECS\Component.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="ECS\System.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="ECS\World.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="TestSystem.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="ECS\Entity.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ECS\Component.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\Entity.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\System.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="ECS\World.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="TestSystem.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="TestComponent.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
