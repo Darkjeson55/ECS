@@ -1,85 +1,127 @@
 #include <iostream>
 #include <chrono>
 
+#include "World.h"
+#include "System.h"
+#include "Component.h"
+#include "ComponentPool.h"
 
-#include <vector>
-#include <tuple>
 
 using namespace std;
 using namespace std::chrono;
 
 struct Vector3f
 {
-	float x, y, z;
+	float x = 15;
+	float y, z;
 };
 
+World world; 
 
-struct Transform
+struct Transform : public Component<Transform>
 {
 	Vector3f position;
 };
 
-struct Entity
+struct Speed : public Component<Speed>
 {
-	Entity()
-	{
-		m_components.resize(150);
+	Vector3f position;
+};
 
-	}
+class Moviment : public System
+{
+public:
+	Moviment();
 
+	void Update(uint32_t entity);
 
-	void addComponent(uint32_t ID, uint32_t index)
-	{
-		m_components[ID] = index;
-	}
+	~Moviment();
 
-
-	inline uint32_t getComponent(const uint32_t ID) { return m_components[ID]; }
-
-
+private:
 
 };
 
+Moviment::Moviment()
+{
+	registerComponent(Transform::ID);
+	registerComponent(Speed::ID);
+}
+
+void Moviment::Update(uint32_t entity)
+{
+	auto component = world.getComponent<Transform>(entity);
+
+	component->position.x += 5;
+
+}
+
+Moviment::~Moviment()
+{
+}
+
+class Render : public System
+{
+public:
+	Render();
+
+	void Update(uint32_t entity);
+
+	~Render();
+
+private:
+
+};
+
+Render::Render()
+{
+	registerComponent(Transform::ID);
+	registerComponent(Speed::ID);
+}
+
+void Render::Update(uint32_t entity)
+{
+	auto component = world.getComponent<Transform>(entity);
+	auto component02 = world.getComponent<Speed>(entity);
+
+	component->position.x += 5;
+	component02->position.y = 12;
+}
+
+Render::~Render()
+{
+}
 
 
-
-	std::vector<uint32_t> m_components;
-std::vector<uint8_t> Components;
-std::vector<Entity> m_Entity;
+ComponentPool components;
 
 
 int main()
 {
+	world.addSystem(new Moviment());
+	world.addSystem(new Render());
 
-	for (uint32_t i =0; i < 1000000; i++)
+	for (uint32_t i =0; i < 5; i++)
 	{
-		m_Entity.push_back(Entity());
-
-		std::vector<uint8_t>& memory = Components;
-		uint32_t index = memory.size();
-		memory.resize(index + sizeof(Transform));
-		new(&memory[index])Transform(*(Transform*)new Transform());
-		Entity& entity = m_Entity.back();
-		entity.addComponent(0, index);
+		//components.addComponent<Transform>(i);
+		auto entity = world.CreateEntity();
+		world.addComponent<Transform>(entity);
+		world.addComponent<Speed>(entity);
 	}
 
 
 	auto start = steady_clock::now();
-	for (uint32_t i = 0; i < m_Entity.size(); i+=1)
+
+	/*for (uint32_t i = 0; i < 5; i++)
 	{
-		Transform* comp = (Transform*)&Components[m_Entity[i].getComponent(0)];
-
-		comp->position.x += 5;
-		comp->position.y += 5;
-		comp->position.z += 5;
-	}
-
-
+		auto comp = components.getComponent<Transform>(i);
+		//std::cout << comp->position.x << std::endl;
+	}*/
+	world.UpdateSystems();
 	auto end = steady_clock::now();
 
 
 
-
+	
 
 	auto clac = end - start;
 
