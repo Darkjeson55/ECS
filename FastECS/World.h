@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <map>
+#include <algorithm>
 
 
 #include "ComponentPool.h"
@@ -18,7 +19,7 @@ public:
 	World();
 
 	Entity* CreateEntity();
-	void RemoveEntity();
+	void RemoveEntity(Entity* entity);
 
 	template<class T> 
 	void addComponent(Entity* entity)
@@ -36,10 +37,21 @@ public:
 
 
 	void checkEntityToSystem(Entity* entity);
-	void removeComponent();
+
+	template<class Component>
+	void removeComponent(Entity* entity)
+	{
+		entity->removeComponent(Component::ID);	
+		m_Components[Component::ID].removeComponent<Component>(entity->getID());
+
+		removeEntityFromSystem(entity);
+	}
+
+	void removeEntityFromSystem(Entity* entity);
+
 
 	void addSystem(System* system);
-	void removeSystem();
+	void removeSystem(System* system);
 
 	void UpdateSystems();
 

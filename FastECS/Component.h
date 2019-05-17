@@ -2,13 +2,23 @@
 #define COMPONENT_H
 
 #include <iostream>
+#include <vector>
 
 
 struct BaseComponent
 {
-	static uint32_t registerComponentType();
+	static uint32_t registerComponentType(size_t size);
+
+
+	inline static size_t getTypeSize(uint32_t id)
+	{
+		return componentType[id];
+	}
+
+	uint32_t entityIndex;
 private:
 	static uint32_t index;	
+	static std::vector<size_t> componentType;
 };
 
 
@@ -23,10 +33,10 @@ struct Component : public BaseComponent
 
 
 template<class T>
-const uint32_t Component<T>::ID(BaseComponent::registerComponentType());
+const size_t Component<T>::SIZE(sizeof(T));
 
 template<class T>
-const size_t Component<T>::SIZE(sizeof(T));
+const uint32_t Component<T>::ID(BaseComponent::registerComponentType(T::SIZE));
 
 
 #endif

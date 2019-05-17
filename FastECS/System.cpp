@@ -22,7 +22,13 @@ void System::addEntity(uint32_t entity_ID)
 
 void System::removeEntity(uint32_t entity_ID)
 {
-
+	for (uint32_t i = 0; i < m_Entity.size(); i++)
+	{
+		if (m_Entity[i] == entity_ID)
+		{
+			m_Entity.erase(m_Entity.begin() + i);
+		}
+	}
 }
 
 void System::registerComponent(uint32_t ID)

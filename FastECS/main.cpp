@@ -100,7 +100,7 @@ int main()
 	world.addSystem(new Moviment());
 	world.addSystem(new Render());
 
-	for (uint32_t i =0; i < 5; i++)
+	for (uint32_t i =0; i < 1000000; i++)
 	{
 		//components.addComponent<Transform>(i);
 		auto entity = world.CreateEntity();
