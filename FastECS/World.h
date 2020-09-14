@@ -11,6 +11,17 @@
 #include "System.h"
 #include "Entity.h"
 
+class World;
+
+struct EntityHandler
+{
+	template<class T, class... Args>
+	void add_Component(Args... args)
+	{
+		World::addComponent(this, new T(args...));
+	}
+};
+
 
 
 class World
