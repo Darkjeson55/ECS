@@ -64,6 +64,11 @@ public:
 	void addSystem(System* system);
 	void removeSystem(System* system);
 
+	static void resizeComp(int size)
+	{
+		m_Components.resize(size);
+	}
+
 	void UpdateSystems();
 
 	~World();
@@ -73,8 +78,9 @@ private:
 	std::vector<Entity*> m_Entitys;
 	std::vector<System*> m_Systems;
 
-	std::map<uint32_t, ComponentPool> m_Components;
+	//std::unordered_map<uint32_t, ComponentPool> m_Components;
 
+	static std::vector<ComponentPool> m_Components;
 
 
 };

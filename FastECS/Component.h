@@ -15,6 +15,11 @@ struct BaseComponent
 		return componentType[id];
 	}
 
+	inline static size_t getTypeListSize()
+	{
+		return componentType.size();
+	}
+
 	uint32_t entityIndex;
 private:
 	static uint32_t index;	

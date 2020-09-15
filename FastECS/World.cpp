@@ -1,6 +1,6 @@
 #include "World.h"
 
-
+std::vector<ComponentPool> World::m_Components;
 
 World::World()
 {

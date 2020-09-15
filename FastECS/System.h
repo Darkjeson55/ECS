@@ -41,6 +41,7 @@ private:
 	std::bitset<150> m_key;
 	std::vector<uint32_t> m_ComponentTypes;
 	std::vector<uint32_t> m_Entity;
+
 };
 
 

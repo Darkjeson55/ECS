@@ -12,6 +12,10 @@ public:
 	template<class T>
 	void addComponent(uint32_t entityID)
 	{
+
+		//TODO: resize moltiplicativo invece che additivo (ogni volta che si raggiunge il limite raddoppi la grandezza)
+		//si passa da O(n) a O(1) in media
+
 		uint32_t index = m_Components.size();
 		m_Components.resize(index + T::SIZE);
 		BaseComponent* comp = new(&m_Components[index])T(*(T*)new T());
